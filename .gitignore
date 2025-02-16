@@ -47,3 +47,7 @@ logs/
 # System
 .DS_Store
 Thumbs.db
+
+# Additional
+.env
+*.pyc
