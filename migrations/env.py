@@ -22,14 +22,16 @@ config = context.config
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
-# Override sqlalchemy.url with environment variables
+# Get database URL from environment
+database_url = os.getenv('DATABASE_URL')
+
+# Handle Render.com's postgres:// vs postgresql:// difference
+if database_url and database_url.startswith("postgres://"):
+    database_url = database_url.replace("postgres://", "postgresql://", 1)
+
+# Override sqlalchemy.url with environment variable
 section = config.config_ini_section
-config.set_section_option(
-    section,
-    "sqlalchemy.url",
-    f"postgresql://{os.getenv('POSTGRES_USER')}:{os.getenv('POSTGRES_PASSWORD')}"
-    f"@{os.getenv('POSTGRES_HOST')}:{os.getenv('POSTGRES_PORT')}/{os.getenv('POSTGRES_DB')}"
-)
+config.set_section_option(section, "sqlalchemy.url", database_url)
 
 # Set target metadata
 target_metadata = SQLModel.metadata
