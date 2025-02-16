@@ -9,15 +9,12 @@ from sqlmodel import Field, Session, SQLModel, create_engine, select
 # Load environment variables
 load_dotenv()
 
-# Database configuration
-POSTGRES_USER = os.getenv("POSTGRES_USER")
-POSTGRES_PASSWORD = os.getenv("POSTGRES_PASSWORD")
-POSTGRES_DB = os.getenv("POSTGRES_DB")
-POSTGRES_HOST = os.getenv("POSTGRES_HOST")
-POSTGRES_PORT = os.getenv("POSTGRES_PORT")
+# Load environment variables from .env file (only in development)
+if os.getenv('ENVIRONMENT') != 'production':
+    load_dotenv()
 
-# Create PostgreSQL URL
-DATABASE_URL = f"postgresql://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{POSTGRES_HOST}:{POSTGRES_PORT}/{POSTGRES_DB}"
+# Database configuration
+DATABASE_URL = os.getenv('DATABASE_URL')
 
 # Create engine
 engine = create_engine(DATABASE_URL, echo=True)
