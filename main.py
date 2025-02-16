@@ -40,9 +40,9 @@ class Item(SQLModel, table=True):
     price: float = Field(sa_type=Float)
     is_offer: bool | None = Field(default=None, sa_type=Boolean)
 
-app.get("/")
+@app.get("/")
 def read_root():
-    return {"Hello": "World"}
+    return {"Hello": "API"}
 
 @app.get("/items/{item_id}")
 def read_item(item_id: int, session: SessionDep):
